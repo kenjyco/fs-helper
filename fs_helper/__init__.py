@@ -3,6 +3,11 @@ import os.path
 from os import makedirs
 
 
+def abspath(filepath):
+    """Return absolute path to filepath"""
+    return os.path.abspath(os.path.expanduser(filepath))
+
+
 def lazy_filename(text, ext=''):
     """Return a filename string for the given text and optional extension (ext)
 
@@ -36,11 +41,10 @@ def get_logger(module_name,
     """
     assert file_format or stream_format, 'Must supply a file_format or stream_format'
 
-
     logger = logging.getLogger(module_name)
     logger.setLevel(logging.DEBUG)
     if file_format:
-        logdir = os.path.abspath(os.path.expanduser(logdir))
+        logdir = abspath(logdir)
         if not os.path.isdir(logdir):
             makedirs(logdir)
         logfile = os.path.join(logdir, '{}.log'.format(module_name))
