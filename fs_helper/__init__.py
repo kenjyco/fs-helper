@@ -1,6 +1,7 @@
 import logging
 import os.path
 from os import makedirs
+from hashlib import sha256
 
 
 def abspath(filepath):
@@ -60,3 +61,10 @@ def get_logger(module_name,
         console_handler.setFormatter(logging.Formatter('%(asctime)s: %(message)s'))
         logger.addHandler(console_handler)
     return logger
+
+
+def sha256sum(filepath):
+    """Return the SHA256 checksum for specified file"""
+    with open(abspath(filepath), 'rb') as fp:
+        digest = sha256(fp.read()).hexdigest()
+    return digest
