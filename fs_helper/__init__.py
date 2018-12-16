@@ -51,14 +51,12 @@ def get_logger(module_name,
         logfile = os.path.join(logdir, '{}.log'.format(module_name))
         file_handler = logging.FileHandler(logfile, mode='a')
         file_handler.setLevel(file_level)
-        file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(funcName)s: %(message)s'
-        ))
+        file_handler.setFormatter(logging.Formatter(file_format))
         logger.addHandler(file_handler)
     if stream_format:
         console_handler = logging.StreamHandler()
         console_handler.setLevel(stream_level)
-        console_handler.setFormatter(logging.Formatter('%(asctime)s: %(message)s'))
+        console_handler.setFormatter(logging.Formatter(stream_format))
         logger.addHandler(console_handler)
     return logger
 
