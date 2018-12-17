@@ -1,6 +1,7 @@
 import logging
+import time
 import os.path
-from os import makedirs
+from os import makedirs, listdir
 from hashlib import sha256
 
 
@@ -66,3 +67,36 @@ def sha256sum(filepath):
     with open(abspath(filepath), 'rb') as fp:
         digest = sha256(fp.read()).hexdigest()
     return digest
+
+
+def wait_for_write_age(filepath, age=10, sleeptime=1, verbose=False):
+    """Wait until it has been age seconds since filepath was written to
+
+    - sleeptime: number of seconds to sleep before each check
+    - verbose: if True, print a message before each sleep
+    """
+    filepath = abspath(filepath)
+    since_last_write = time.time() - os.path.getmtime(filepath)
+    while since_last_write < age:
+        if verbose:
+            print('Only been {} seconds since last write to {}'.format(since_last_write, filepath))
+        time.sleep(sleeptime)
+        since_last_write = time.time() - os.path.getmtime(filepath)
+    return True
+
+
+def wait_for_empty_directory(dirpath, sleeptime=1, verbose=False):
+    """Wait until the specified dirpath contains no files
+
+    - sleeptime: number of seconds to sleep before each check
+    - verbose: if True, print a message before each sleep
+    """
+    dirpath = abspath(dirpath)
+    if os.path.isdir(dirpath):
+        num_files = len(os.listdir(dirpath))
+        while num_files > 0:
+            if verbose:
+                print('There are still {} files in {}.'.format(num_files, dirpath))
+            time.sleep(sleeptime)
+            num_files = len(os.listdir(dirpath))
+        return True
