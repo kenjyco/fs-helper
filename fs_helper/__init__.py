@@ -60,7 +60,7 @@ def get_logger(module_name,
         logdir = abspath(logdir)
         if not os.path.isdir(logdir):
             makedirs(logdir)
-        logfile = os.path.join(logdir, '{}.log'.format(module_name))
+        logfile = os.path.join(logdir, '{}.log'.format(module_name.replace('_', '-')))
         file_handler = logging.FileHandler(logfile, mode='a')
         file_handler.setLevel(file_level)
         file_handler.setFormatter(logging.Formatter(file_format))
