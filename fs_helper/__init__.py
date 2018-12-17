@@ -1,13 +1,24 @@
 import logging
 import time
 import os.path
-from os import makedirs, listdir
+from os import makedirs, listdir, getcwd
 from hashlib import sha256
 
 
 def abspath(filepath):
     """Return absolute path to filepath"""
     return os.path.abspath(os.path.expanduser(filepath))
+
+
+def repopath(filepath=''):
+    """Return base git repo for filepath"""
+    path = abspath(filepath) if filepath else getcwd()
+    while not os.path.isdir(os.path.join(path, '.git')):
+        path = os.path.dirname(path)
+        if path == '/':
+            break
+    if path != '/':
+        return path
 
 
 def lazy_filename(text, ext=''):
