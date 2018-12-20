@@ -73,6 +73,17 @@ def get_logger(module_name,
     return logger
 
 
+def get_logfile_from_logger(logger):
+    """Return the path to the log file if there is a logging.FileHandler"""
+    try:
+        file_handlers = [h for h in logger.handlers if type(h) == logging.FileHandler]
+    except:
+        pass
+    else:
+        if file_handlers:
+            return file_handlers[0].baseFilename
+
+
 def sha256sum(filepath):
     """Return the SHA256 checksum for specified file"""
     with open(abspath(filepath), 'rb') as fp:
