@@ -5,6 +5,16 @@ from os import makedirs, listdir, getcwd
 from hashlib import sha256
 
 
+LOG_LEVELS = {
+    'critical': logging.CRITICAL,
+    'error': logging.ERROR,
+    'warning': logging.WARNING,
+    'info': logging.INFO,
+    'debug': logging.DEBUG,
+    'notset': logging.NOTSET,
+}
+
+
 def abspath(filepath):
     """Return absolute path to filepath"""
     return os.path.abspath(os.path.expanduser(filepath))
@@ -51,8 +61,13 @@ def get_logger(module_name,
       or None, don't use a stream handler
     - file_level: logging level for file handler
     - stream_level: logging level for stream/console handler
+
+    Note: file_level and stream_level params also accepts strings (critical,
+    error, warning, info, debug, notset) and ints (50, 40, 30, 20, 10, 0)
     """
     assert file_format or stream_format, 'Must supply a file_format or stream_format'
+    file_level = file_level if type(file_level) == int else LOG_LEVELS.get(file_level.lower(), 0)
+    stream_level = stream_level if type(stream_level) == int else LOG_LEVELS.get(stream_level.lower(), 0)
 
     logger = logging.getLogger(module_name)
     logger.setLevel(logging.DEBUG)
