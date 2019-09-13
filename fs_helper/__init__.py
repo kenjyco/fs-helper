@@ -1,10 +1,12 @@
 import logging
 import time
 import os.path
-from os import makedirs, listdir, getcwd
+from os import makedirs, listdir, getcwd, access, W_OK
 from hashlib import sha256
 
 
+DEFAULT_LOG_DIR = '~/logs'
+ALTERNATE_LOG_DIR = '/tmp/logs'
 LOG_LEVELS = {
     'critical': logging.CRITICAL,
     'error': logging.ERROR,
@@ -48,7 +50,7 @@ def lazy_filename(text, ext=''):
 
 
 def get_logger(module_name,
-               logdir='~/logs',
+               logdir=DEFAULT_LOG_DIR,
                file_format='%(asctime)s - %(levelname)s - %(funcName)s: %(message)s',
                stream_format='%(asctime)s: %(message)s',
                file_level=logging.DEBUG,
@@ -74,7 +76,36 @@ def get_logger(module_name,
     if file_format:
         logdir = abspath(logdir)
         if not os.path.isdir(logdir):
-            makedirs(logdir)
+            try:
+                makedirs(logdir)
+            except(PermissionError, OSError):
+                try:
+                    makedirs(ALTERNATE_LOG_DIR)
+                except(PermissionError, OSError):
+                    msg = 'Cannot create {} or {}'.format(repr(logdir), repr(ALTERNATE_LOG_DIR))
+                    raise Exception(msg)
+                else:
+                    logdir = ALTERNATE_LOG_DIR
+        if not access(logdir, W_OK):
+            if logdir != ALTERNATE_LOG_DIR:
+                try:
+                    makedirs(ALTERNATE_LOG_DIR)
+                except FileExistsError:
+                    msg = 'Cannot write in {} and cannot write in existing {}'.format(
+                        repr(logdir), repr(ALTERNATE_LOG_DIR)
+                    )
+                    assert access(ALTERNATE_LOG_DIR, W_OK), msg
+                    logdir = ALTERNATE_LOG_DIR
+                except(PermissionError, OSError):
+                    msg = 'Cannot write in {} and cannot create {}'.format(
+                        repr(logdir), repr(ALTERNATE_LOG_DIR)
+                    )
+                    raise Exception(msg)
+                else:
+                    logdir = ALTERNATE_LOG_DIR
+            else:
+                msg = 'Cannot write in {}'.format(repr(logdir))
+                raise Exception(msg)
         logfile = os.path.join(logdir, '{}.log'.format(module_name.replace('_', '-')))
         file_handler = logging.FileHandler(logfile, mode='a')
         file_handler.setLevel(file_level)
