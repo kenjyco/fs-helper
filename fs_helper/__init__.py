@@ -81,6 +81,8 @@ def get_logger(module_name,
             except(PermissionError, OSError):
                 try:
                     makedirs(ALTERNATE_LOG_DIR)
+                except FileExistsError:
+                    logdir = ALTERNATE_LOG_DIR
                 except(PermissionError, OSError):
                     msg = 'Cannot create {} or {}'.format(repr(logdir), repr(ALTERNATE_LOG_DIR))
                     raise Exception(msg)
