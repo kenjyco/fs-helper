@@ -6,14 +6,14 @@ with open('README.rst', 'r') as fp:
 
 setup(
     name='fs-helper',
-    version='0.0.7',
+    version='0.0.8',
     description='CLI helpers for filesystem tasks',
     long_description=long_description,
     author='Ken',
     author_email='kenjyco@gmail.com',
     license='MIT',
     url='https://github.com/kenjyco/fs-helper',
-    download_url='https://github.com/kenjyco/fs-helper/tarball/v0.0.7',
+    download_url='https://github.com/kenjyco/fs-helper/tarball/v0.0.8',
     packages=find_packages(),
     include_package_data=True,
     package_dir={'': '.'},
