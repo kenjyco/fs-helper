@@ -7,7 +7,7 @@ with open('README.rst', 'r') as fp:
 setup(
     name='fs-helper',
     version='0.0.8',
-    description='CLI helpers for filesystem tasks',
+    description='CLI helpers for filesystem and logging tasks',
     long_description=long_description,
     author='Ken',
     author_email='kenjyco@gmail.com',
@@ -23,11 +23,16 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
-        'Topic :: Software Development :: Libraries',
         'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: System :: Filesystems',
+        'Topic :: System :: Logging',
+        'Topic :: Utilities',
     ],
-    keywords = ['filesystem', 'files', 'helper']
+    keywords=['filesystem', 'logging', 'files', 'helper', 'kenjyco']
 )
