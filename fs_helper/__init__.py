@@ -22,6 +22,16 @@ def abspath(filepath):
     return os.path.abspath(os.path.expanduser(filepath))
 
 
+def strip_extension(filepath):
+    """Strip the extension off of the filename in filepath"""
+    return os.path.splitext(filepath)[0]
+
+
+def get_extension(filepath):
+    """Get the extension of the filename in filepath"""
+    return os.path.splitext(filepath)[1].strip('.')
+
+
 def repopath(filepath=''):
     """Return base git repo for filepath"""
     path = abspath(filepath) if filepath else getcwd()
