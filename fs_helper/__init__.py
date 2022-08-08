@@ -142,6 +142,15 @@ def get_logfile_from_logger(logger):
             return file_handlers[0].baseFilename
 
 
+def get_logger_filenames(logger):
+    """Return the filenames of a logger object"""
+    return [
+        handler.baseFilename
+        for handler in logger.handlers
+        if hasattr(handler, 'baseFilename')
+    ]
+
+
 def sha256sum(filepath):
     """Return the SHA256 checksum for specified file"""
     with open(abspath(filepath), 'rb') as fp:
