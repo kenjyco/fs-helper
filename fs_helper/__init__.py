@@ -43,6 +43,32 @@ def repopath(filepath=''):
         return path
 
 
+def get_local_package_info(dirpath, exception=True):
+    """Return a dict with contents of a package's setup.py and/or pyproject.toml
+
+    - dirpath: path to a locally cloned repo for the package
+    - exception: if True, raise Exception if dirpath is not a Python project
+    """
+    results = {}
+    dirpath = abspath(dirpath)
+    setup_file = os.path.join(dirpath, 'setup.py')
+    toml_file = os.path.join(dirpath, 'pyproject.toml')
+    if os.path.isfile(setup_file):
+        with open(setup_file, 'r') as fp:
+            results['setup.py_path'] = setup_file
+            results['setup.py_content'] = fp.read()
+    if os.path.isfile(toml_file):
+        with open(toml_file, 'r') as fp:
+            results['pyproject.toml_path'] = toml_file
+            results['pyproject.toml_content'] = fp.read()
+    if not results:
+        message = '{} does not appear to be a python project (no setup.py or pyproject.toml)'.format(dirpath)
+        if exception:
+            raise Exception(message)
+        print(message)
+    return results
+
+
 def lazy_filename(text, ext=''):
     """Return a filename string for the given text and optional extension (ext)
 
